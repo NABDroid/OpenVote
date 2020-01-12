@@ -15,12 +15,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText userNameET, mobileNumberET, emailET, passwordET, confirmPasswordET;
     private Button registerBTN;
     String userName, mobileNumber, email, password, confirmPassword;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
                 password = passwordET.getText().toString().trim();
                 confirmPassword = confirmPasswordET.getText().toString().trim();
                 if (confirmPassword.equals(password)) {
-                    createUser(email, password);
+                    createUser(userName, mobileNumber, email, password);
                 }
                 else {
                     Toast.makeText(SignUpActivity.this, "Password didn't mached", Toast.LENGTH_SHORT).show();
@@ -48,13 +53,27 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void createUser(String email, String password) {
+    private void createUser(final String userName, final String mobileNumber, final String email , String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                            DatabaseReference userRef = databaseReference.child("Users").child(userName);
+                            HashMap<String,Object> usermap = new HashMap<>();
+                            usermap.put("mobile",mobileNumber);
+                            usermap.put("email",email);
+
+                            userRef.setValue(usermap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+
+                                    }
+                                }
+                            });
+
                         }
                         else {
                             String error = task.getException().toString().trim();
@@ -74,5 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
         confirmPasswordET = findViewById(R.id.confirmPasswordETSU);
         registerBTN = findViewById(R.id.registerBTNSU);
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 }

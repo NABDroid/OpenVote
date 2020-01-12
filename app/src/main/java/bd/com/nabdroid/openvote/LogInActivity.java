@@ -20,7 +20,7 @@ import javax.security.auth.login.LoginException;
 
 public class LogInActivity extends AppCompatActivity {
     private EditText emailET, passwordET;
-    private Button loginBTN;
+    private Button loginBTN, goForSignUpBTN;
     private String email, password;
     private FirebaseAuth firebaseAuth;
 
@@ -35,6 +35,13 @@ public class LogInActivity extends AppCompatActivity {
                 email = emailET.getText().toString().trim();
                 password = passwordET.getText().toString().trim();
                 logIn(email, password);
+            }
+        });
+
+        goForSignUpBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LogInActivity.this, SignUpActivity.class));
             }
         });
 
@@ -64,5 +71,6 @@ public class LogInActivity extends AppCompatActivity {
         passwordET = findViewById(R.id.passwordETLI);
         loginBTN = findViewById(R.id.loginBTNLI);
         firebaseAuth = FirebaseAuth.getInstance();
+        goForSignUpBTN = findViewById(R.id.goForSignUpBTNLI);
     }
 }

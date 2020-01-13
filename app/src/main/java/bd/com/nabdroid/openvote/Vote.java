@@ -2,12 +2,14 @@ package bd.com.nabdroid.openvote;
 
 public class Vote {
 
-    private String topic;
+    private String title, topic;
     private int lifeTime;
 
-    public Vote(String topic, int lifeTime) {
+
+    public Vote(String title, String topic, int lifeTime) {
         this.topic = topic;
         this.lifeTime = lifeTime;
+        this.title = title;
     }
 
     public String getTopic() {
@@ -16,6 +18,14 @@ public class Vote {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getLifeTime() {

@@ -9,6 +9,13 @@
     tools:context=".PostVoteActivity">
 
     <EditText
+        android:id="@+id/titleETPV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Question"
+        android:textColor="@color/text_color" />
+
+    <EditText
         android:id="@+id/voteTopicPV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

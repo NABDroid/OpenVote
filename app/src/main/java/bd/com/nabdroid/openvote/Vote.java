@@ -5,10 +5,20 @@ public class Vote {
     private String title, topic;
     private int lifeTime;
 
+    public Vote() {
+    }
 
     public Vote(String title, String topic, int lifeTime) {
+        this.title = title;
         this.topic = topic;
         this.lifeTime = lifeTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -20,14 +30,6 @@ public class Vote {
         this.topic = topic;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getLifeTime() {
         return lifeTime;
     }
@@ -36,6 +38,5 @@ public class Vote {
         this.lifeTime = lifeTime;
     }
 
-    public Vote() {
-    }
+
 }

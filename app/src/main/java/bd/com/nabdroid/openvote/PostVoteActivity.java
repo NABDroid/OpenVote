@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class PostVoteActivity extends AppCompatActivity {
 
+
     private EditText titleET, voteTopicET, voteLifetimeET;
     private Button startVoteBTN;
     private DatabaseReference databaseReference;
@@ -29,7 +30,6 @@ public class PostVoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_vote);
         init();
-        getCurrentUsersUserName();
         startVoteBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,9 +56,6 @@ public class PostVoteActivity extends AppCompatActivity {
 
     }
 
-    private void getCurrentUsersUserName() {
-
-    }
 
     private void init() {
         titleET = findViewById(R.id.titleETPV);

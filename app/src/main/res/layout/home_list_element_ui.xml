@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp">
 
@@ -11,6 +11,7 @@
        android:orientation="horizontal">
 
        <TextView
+           android:id="@+id/userNameTVHAUI"
            android:drawableLeft="@drawable/account_circle_head_icon"
            android:ellipsize="start"
            android:gravity="center_vertical"
@@ -23,6 +24,7 @@
            android:textSize="14sp" />
 
        <TextView
+           android:id="@+id/titleTVHAUI"
            android:layout_width="0dp"
            android:layout_height="wrap_content"
            android:layout_weight="0.30"
@@ -34,29 +36,45 @@
    </LinearLayout>
 
     <TextView
+        android:id="@+id/questionTVHAUI"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Your question will be placed here?"
         android:textColor="@color/text_color"
         android:textSize="18sp" />
-    <RadioGroup
-        android:id="@+id/voteRadioGroup"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <RadioButton
-            android:id="@+id/agreeRBHUI"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agree"/>
-        <RadioButton
-            android:id="@+id/disagreeRBHUI"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Disagree"/>
+        android:orientation="horizontal">
 
-    </RadioGroup>
+        <TextView
+            android:id="@+id/voteCountTVHAUI"
+            android:ellipsize="start"
+            android:gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:layout_marginTop="5dp"
+            android:text="30 human agreed and 10 allien disagreed"
+            android:textColor="@color/text_color"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/remainingTimeTVHAUI"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.40"
+            android:layout_marginTop="5dp"
+            android:text="Time Remain: 30hr"
+            android:textColor="@color/text_color"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

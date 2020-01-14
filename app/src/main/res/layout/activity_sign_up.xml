@@ -34,6 +34,23 @@
         android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/genderETSU"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="gender"
+        android:inputType="numberDecimal"
+        android:textColor="@color/text_color"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/dobETSU"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="date of birth"
+        android:textColor="@color/text_color"
+        android:textSize="16sp" />
+
+    <EditText
         android:id="@+id/passwordETSU"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

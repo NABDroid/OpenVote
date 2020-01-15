@@ -36,7 +36,7 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
         lifetime = vote.getLifeTime();
         holder.questionTV.setText(topic);
         holder.titleTV.setText(title);
-        holder.remainingTimeTV.setText(Integer.toString(lifetime));
+        holder.lifetimeTV.setText(Integer.toString(lifetime));
     }
 
     @Override
@@ -45,16 +45,15 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView userNameTV, titleTV, questionTV, voteCountTV, remainingTimeTV;
+        private TextView userNameTV, titleTV, questionTV, voteCountTV, lifetimeTV;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userNameTV = itemView.findViewById(R.id.userNameTVHAUI);
             titleTV = itemView.findViewById(R.id.titleTVHAUI);
-            questionTV = itemView.findViewById(R.id.questionTVHAUI);
-            voteCountTV = itemView.findViewById(R.id.voteCountTVHAUI);
-            remainingTimeTV = itemView.findViewById(R.id.remainingTimeTVHAUI);
+            questionTV = itemView.findViewById(R.id.topicTVHAUI);
+            lifetimeTV = itemView.findViewById(R.id.lifetimeTVHAUI);
         }
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
-    private EditText userNameET, mobileNumberET, emailET, dateOfBirthET, genderET, passwordET, confirmPasswordET;
+    private EditText userNameET, mobileNumberET, emailET, dateOfBirthET, passwordET, confirmPasswordET;
+    private RadioGroup genderRG;
     private Button registerBTN;
-    String userName, mobileNumber, email, dateOfBirth, gender, password, confirmPassword;
+    private String userName, mobileNumber, email, dateOfBirth, gender, password, confirmPassword;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
@@ -35,15 +37,11 @@ public class SignUpActivity extends AppCompatActivity {
         registerBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userName = userNameET.getText().toString().trim();
-                mobileNumber = mobileNumberET.getText().toString().trim();
-                email = emailET.getText().toString().trim();
-                dateOfBirth = dateOfBirthET.getText().toString().trim();
-                gender = genderET.getText().toString().trim();
-                password = passwordET.getText().toString().trim();
-                confirmPassword = confirmPasswordET.getText().toString().trim();
+
+
+                getDataFromFields();
                 if (confirmPassword.equals(password)) {
-                    createUser(userName, mobileNumber, email, dateOfBirth, gender, password);
+                    createUser();
                 } else {
                     Toast.makeText(SignUpActivity.this, "Password didn't mached", Toast.LENGTH_SHORT).show();
                 }
@@ -54,21 +52,31 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void createUser(final String userName, final String mobileNumber, final String email, final String dateOfBirth, final String gender, final String password) {
+
+    // collect data form fields
+    private void getDataFromFields() {
+        int genderId = genderRG.getCheckedRadioButtonId();
+        if (genderId == R.id.maleId) {
+            gender = "Male";
+        } else {
+            gender = "Female";
+        }
+        userName = userNameET.getText().toString().trim();
+        mobileNumber = mobileNumberET.getText().toString().trim();
+        email = emailET.getText().toString().trim();
+        dateOfBirth = dateOfBirthET.getText().toString().trim();
+        password = passwordET.getText().toString().trim();
+        confirmPassword = confirmPasswordET.getText().toString().trim();
+    }
+
+    //Register users
+    private void createUser() {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            DatabaseReference userRef = databaseReference.child("Users").child(email);
-                            UserProfile userProfile = new UserProfile(userName, mobileNumber, email, dateOfBirth, gender, password);
-                            userRef.setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    Toast.makeText(SignUpActivity.this, "User data saved",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
+                            saveInfo();
                         } else {
                             String error = task.getException().toString().trim();
                             Toast.makeText(SignUpActivity.this, "Message: " + error + "", Toast.LENGTH_SHORT).show();
@@ -79,12 +87,39 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
+    //save data to db
+    private void saveInfo() {
+        DatabaseReference userRef = databaseReference.child("UserInfo").child(email);
+        HashMap<String, Object> userMap = new HashMap<>();
+        userMap.put("userName", userName);
+        userMap.put("mobileNumber", mobileNumber);
+        userMap.put("dateOfBirth", dateOfBirth);
+        userMap.put("gender", gender);
+
+        userRef.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                }
+                else {
+                    Toast.makeText(SignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+
+    }
+
+
+    //init fields
     private void init() {
+        genderRG = findViewById(R.id.genderRGSU);
         userNameET = findViewById(R.id.userNameETSU);
         mobileNumberET = findViewById(R.id.mobileNumberETSU);
         emailET = findViewById(R.id.emailETSU);
         dateOfBirthET = findViewById(R.id.dobETSU);
-        genderET = findViewById(R.id.genderETSU);
         passwordET = findViewById(R.id.passwordETSU);
         confirmPasswordET = findViewById(R.id.confirmPasswordETSU);
         registerBTN = findViewById(R.id.registerBTNSU);

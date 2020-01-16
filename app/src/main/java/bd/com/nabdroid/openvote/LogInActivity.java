@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import javax.security.auth.login.LoginException;
 
@@ -29,6 +30,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         init();
+
         loginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +67,21 @@ public class LogInActivity extends AppCompatActivity {
                 });
     }
 
-
     private void init() {
         emailET = findViewById(R.id.emailETLI);
         passwordET = findViewById(R.id.passwordETLI);
         loginBTN = findViewById(R.id.loginBTNLI);
         firebaseAuth = FirebaseAuth.getInstance();
         goForSignUpBTN = findViewById(R.id.goForSignUpBTNLI);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null){
+            startActivity(new Intent(LogInActivity.this, HomeActivity.class));
+        }
     }
 }

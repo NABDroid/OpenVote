@@ -77,15 +77,27 @@
 
             <TextView
                 android:id="@+id/topicTVHAUI"
-                android:textColor="@color/text_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
                 android:text="Voting Topic"
-                android:textSize="14sp" />
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/voteCountTVHAUI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:paddingLeft="10dp"
+                android:text="30 people agreed and 10 allien disagreed!"
+                android:textColor="#7C7878"
+                android:textSize="12sp" />
+
 
             <RadioGroup
+                android:id="@+id/radioGRPHAUI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -93,6 +105,7 @@
                 android:orientation="vertical">
 
                 <RadioButton
+                    android:id="@+id/agreeRBHAUI"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Agree"
@@ -100,27 +113,45 @@
                     android:textStyle="bold" />
 
                 <RadioButton
+                    android:id="@+id/disagreeRBHAUI"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Disagree"
                     android:textColor="#EB4D55"
                     android:textStyle="bold" />
-
             </RadioGroup>
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/curve_background"
-                android:gravity="top"
-                android:hint="Add Comment"
-                android:inputType="textMultiLine"
-                android:padding="10dp"
-                android:textSize="12sp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/commentETHAUI"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/curve_background"
+                    android:gravity="top"
+                    android:hint="Add Comment"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/submitVoteIVHAUI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_send_black_24dp"
+                    android:textSize="10sp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 

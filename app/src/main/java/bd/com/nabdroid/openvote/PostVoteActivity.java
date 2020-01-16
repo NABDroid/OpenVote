@@ -118,7 +118,7 @@ public class PostVoteActivity extends AppCompatActivity {
 
 
     private void postVote() {
-        Vote vote = new Vote(voteCode, voteTopic, creatorId, 10, 10, 10);
+        Vote vote = new Vote(voteCode, voteTopic, creatorId, 10, 0, 0);
         DatabaseReference userRef = databaseReference.child("Votes").child(creatorId);
         userRef.setValue(vote).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -37,14 +37,15 @@ public class SignUpActivity extends AppCompatActivity {
         registerBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 getDataFromFields();
+
+
                 if (confirmPassword.equals(password)) {
                     createUser();
                 } else {
                     Toast.makeText(SignUpActivity.this, "Password didn't mached", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });
@@ -89,14 +90,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     //save data to db
     private void saveInfo() {
-        DatabaseReference userRef = databaseReference.child("UserInfo").child(email);
-        HashMap<String, Object> userMap = new HashMap<>();
-        userMap.put("userName", userName);
-        userMap.put("mobileNumber", mobileNumber);
-        userMap.put("dateOfBirth", dateOfBirth);
-        userMap.put("gender", gender);
+        String uId = firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference userRef = databaseReference.child("UserInfo").child(uId);
+        UserProfile userProfile = new UserProfile(userName, mobileNumber, email, dateOfBirth, gender, password);
 
-        userRef.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        userRef.setValue(userProfile).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

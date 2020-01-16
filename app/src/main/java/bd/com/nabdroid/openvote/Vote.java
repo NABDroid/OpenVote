@@ -2,24 +2,27 @@ package bd.com.nabdroid.openvote;
 
 public class Vote {
 
-    private String title, topic;
-    private int lifeTime;
+    private String voteCode, topic, creatorId;
+    private int endTime, yesVote, noVote;
+
+    public Vote(String voteCode, String topic, String creatorId, int endTime, int yesVote, int noVote) {
+        this.voteCode = voteCode;
+        this.topic = topic;
+        this.creatorId = creatorId;
+        this.endTime = endTime;
+        this.yesVote = yesVote;
+        this.noVote = noVote;
+    }
 
     public Vote() {
     }
 
-    public Vote(String title, String topic, int lifeTime) {
-        this.title = title;
-        this.topic = topic;
-        this.lifeTime = lifeTime;
+    public String getVoteCode() {
+        return voteCode;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setVoteCode(String voteCode) {
+        this.voteCode = voteCode;
     }
 
     public String getTopic() {
@@ -30,13 +33,35 @@ public class Vote {
         this.topic = topic;
     }
 
-    public int getLifeTime() {
-        return lifeTime;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-    public void setLifeTime(int lifeTime) {
-        this.lifeTime = lifeTime;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
+    public int getEndTime() {
+        return endTime;
+    }
 
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getYesVote() {
+        return yesVote;
+    }
+
+    public void setYesVote(int yesVote) {
+        this.yesVote = yesVote;
+    }
+
+    public int getNoVote() {
+        return noVote;
+    }
+
+    public void setNoVote(int noVote) {
+        this.noVote = noVote;
+    }
 }

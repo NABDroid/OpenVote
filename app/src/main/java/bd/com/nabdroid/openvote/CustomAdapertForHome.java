@@ -18,6 +18,9 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
         this.votes = votes;
     }
 
+
+
+    //
     @NonNull
     @Override
     public CustomAdapertForHome.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -28,15 +31,17 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapertForHome.ViewHolder holder, int position) {
-        String title, topic;
-        int lifetime;
+        String code, topic, creatorName;
+        int endTime;
         Vote vote = votes.get(position);
-        title = vote.getTitle();
+        creatorName = vote.getCreatorId();
+        code = vote.getVoteCode();
         topic = vote.getTopic();
-        lifetime = vote.getLifeTime();
-        holder.questionTV.setText(topic);
-        holder.titleTV.setText(title);
-        holder.lifetimeTV.setText(Integer.toString(lifetime));
+        endTime = vote.getEndTime();
+        holder.userNameTV.setText(creatorName);
+        holder.topicTV.setText(topic);
+        holder.titleTV.setText(code);
+        holder.lifetimeTV.setText(Integer.toString(endTime));
     }
 
     @Override
@@ -45,14 +50,14 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView userNameTV, titleTV, questionTV, voteCountTV, lifetimeTV;
+        private TextView userNameTV, titleTV, topicTV, voteCountTV, lifetimeTV;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userNameTV = itemView.findViewById(R.id.userNameTVHAUI);
             titleTV = itemView.findViewById(R.id.titleTVHAUI);
-            questionTV = itemView.findViewById(R.id.topicTVHAUI);
+            topicTV = itemView.findViewById(R.id.topicTVHAUI);
             lifetimeTV = itemView.findViewById(R.id.lifetimeTVHAUI);
         }
     }

@@ -81,8 +81,8 @@ public class PostVoteActivity extends AppCompatActivity {
         userInfoRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               creatorName = dataSnapshot.child("userName").toString();
-               startVoteBTN.setText(creatorName);
+               creatorName = dataSnapshot.child("userName").getValue().toString();
+               
             }
 
             @Override
@@ -164,7 +164,7 @@ public class PostVoteActivity extends AppCompatActivity {
 
     private void postVote() {
 
-        Vote vote = new Vote(voteCode, voteTopic, creatorId, "SampleUser", 10, 0, 0);
+        Vote vote = new Vote(voteCode, voteTopic, creatorId, creatorName, 10, 0, 0);
         DatabaseReference userRef = databaseReference.child("Votes").child(creatorId);
         userRef.setValue(vote).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

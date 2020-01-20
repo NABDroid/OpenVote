@@ -61,7 +61,6 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
 
 
 
-
         //showing data to homeActivityUI
         holder.userNameTV.setText(creatorName);
         holder.topicTV.setText(topic);
@@ -70,6 +69,7 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
         String agreedVote = Integer.toString(vote.getYesVote());
         String disagreedVote = Integer.toString(vote.getNoVote());
         holder.voteCountTV.setText(agreedVote+" people agreed with you and "+disagreedVote+" people disagreed with you!");
+
 
         //sending data to db
         holder.submitBTN.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +145,6 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
 
             }
         });
-
 
     }
 

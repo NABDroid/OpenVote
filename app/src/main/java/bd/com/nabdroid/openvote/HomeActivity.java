@@ -79,9 +79,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     //get data from firebase
     private void getActiveVotes() {
+        votes.clear();
+
         DatabaseReference activVoteRef = databaseReference.child("Votes");
-
-
         activVoteRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

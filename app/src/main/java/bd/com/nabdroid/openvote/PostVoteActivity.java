@@ -77,11 +77,11 @@ public class PostVoteActivity extends AppCompatActivity {
     }
 
     private void getCreatorName() {
-        final DatabaseReference userInfoRef = databaseReference.child("UserInfo");
+        final DatabaseReference userInfoRef = databaseReference.child("UserInfo").child(creatorId);
         userInfoRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               creatorName = userInfoRef.child(creatorId).child("userName").toString();
+               creatorName = dataSnapshot.child("userName").toString();
                startVoteBTN.setText(creatorName);
             }
 

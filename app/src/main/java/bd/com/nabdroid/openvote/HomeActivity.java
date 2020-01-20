@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +23,10 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     //declaration
-    private ImageView addVoteIV;
+    private ImageView addVoteIV, menuIconIV;
     private RecyclerView activeVoteRecyclerView;
     private DatabaseReference databaseReference;
+    FirebaseAuth firebaseAuth;
     private ArrayList<Vote> votes;
     private CustomAdapertForHome customAdapertForHome;
 
@@ -36,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         initRecyclerView();  //initialize recyclerview
         getActiveVotes(); //get data from firebase
         addVoteIV.setOnClickListener(this); //takes to new vote creation page
+        menuIconIV.setOnClickListener(this);
     }
 
 
@@ -46,14 +49,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == R.id.addVoteId) {
             startActivity(new Intent(HomeActivity.this, PostVoteActivity.class));
         }
+
+        else if(v.getId()==R.id.menuIconHA){
+            firebaseAuth.signOut();
+            startActivity(new Intent(HomeActivity.this, LogInActivity.class));
+        }
     }
-
-
 
     //initialize declared elements
     private void init() {
         addVoteIV = findViewById(R.id.addVoteId);
+        menuIconIV = findViewById(R.id.menuIconHA);
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
         activeVoteRecyclerView = findViewById(R.id.activeVoteRecyclerViewID);
         votes = new ArrayList<>();
         customAdapertForHome = new CustomAdapertForHome(votes);
@@ -72,6 +80,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     //get data from firebase
     private void getActiveVotes() {
         DatabaseReference activVoteRef = databaseReference.child("Votes");
+
 
         activVoteRef.addValueEventListener(new ValueEventListener() {
             @Override

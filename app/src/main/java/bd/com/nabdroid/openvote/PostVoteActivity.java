@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +19,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -43,6 +47,7 @@ public class PostVoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_vote);
         init();
+        getCreatorName();
         pickDateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +69,51 @@ public class PostVoteActivity extends AppCompatActivity {
 
                 postVote();
 
+                startActivity(new Intent(PostVoteActivity.this, HomeActivity.class));
+
 
             }
         });
+    }
+
+    private void getCreatorName() {
+        final DatabaseReference userInfoRef = databaseReference.child("UserInfo");
+        userInfoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               creatorName = userInfoRef.child(creatorId).child("userName").toString();
+               startVoteBTN.setText(creatorName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+//        userInfoRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()){
+//
+//                    for(DataSnapshot data : dataSnapshot.getChildren()){
+//                        if(data.equals(creatorId)){
+//                            UserProfile userProfile = data.getValue(UserProfile.class);
+//                            creatorName = userProfile.getUserName();
+//                            startVoteBTN.setText(creatorName);
+//                        }
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
     }
 
     private void pickTime() {
@@ -87,8 +134,6 @@ public class PostVoteActivity extends AppCompatActivity {
         timePickerDialog.show();
 
     }
-
-
 
     private void pickDate() {
 
@@ -118,7 +163,8 @@ public class PostVoteActivity extends AppCompatActivity {
 
 
     private void postVote() {
-        Vote vote = new Vote(voteCode, voteTopic, creatorId, 10, 0, 0);
+
+        Vote vote = new Vote(voteCode, voteTopic, creatorId, "SampleUser", 10, 0, 0);
         DatabaseReference userRef = databaseReference.child("Votes").child(creatorId);
         userRef.setValue(vote).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

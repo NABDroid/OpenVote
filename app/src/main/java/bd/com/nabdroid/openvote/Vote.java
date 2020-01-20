@@ -2,19 +2,29 @@ package bd.com.nabdroid.openvote;
 
 public class Vote {
 
-    private String voteCode, topic, creatorId;
+    private String voteCode, topic, creatorId, creatorName;
     private int endTime, yesVote, noVote;
 
-    public Vote(String voteCode, String topic, String creatorId, int endTime, int yesVote, int noVote) {
+    public Vote(String voteCode, String topic, String creatorId, String creatorName, int endTime, int yesVote, int noVote) {
         this.voteCode = voteCode;
         this.topic = topic;
         this.creatorId = creatorId;
         this.endTime = endTime;
         this.yesVote = yesVote;
         this.noVote = noVote;
+        this.creatorName = creatorName;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 
     public Vote() {
+
     }
 
     public String getVoteCode() {

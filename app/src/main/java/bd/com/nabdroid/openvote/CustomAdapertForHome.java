@@ -1,5 +1,7 @@
 package bd.com.nabdroid.openvote;
 
+import android.app.PendingIntent;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForHome.ViewHolder> {
 
     final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private ArrayList<Vote> votes;
     public CustomAdapertForHome(ArrayList<Vote> votes) {
         this.votes = votes;
@@ -41,15 +45,15 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
     public void onBindViewHolder(@NonNull final CustomAdapertForHome.ViewHolder holder, int position) {
 
 
-        final String code, topic, creatorId, comment;
+        final String code, topic, creatorId, creatorName;
         final int endTime, yesVote, noVote;
 
         //collecting form DB
         final Vote vote = votes.get(position);
-
         code = vote.getVoteCode();
         topic = vote.getTopic();
         creatorId = vote.getCreatorId();
+        creatorName = vote.getCreatorName();
         endTime = vote.getEndTime();
         yesVote = vote.getYesVote();
         noVote = vote.getNoVote();
@@ -57,11 +61,15 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
 
 
 
+
         //showing data to homeActivityUI
-        holder.userNameTV.setText(creatorId);
+        holder.userNameTV.setText(creatorName);
         holder.topicTV.setText(topic);
         holder.titleTV.setText(code);
         holder.lifetimeTV.setText(Integer.toString(endTime));
+        String agreedVote = Integer.toString(vote.getYesVote());
+        String disagreedVote = Integer.toString(vote.getNoVote());
+        holder.voteCountTV.setText(agreedVote+" people agreed with you and "+disagreedVote+" people disagreed with you!");
 
         //sending data to db
         holder.submitBTN.setOnClickListener(new View.OnClickListener() {
@@ -83,10 +91,18 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
                             String agreedVote = Integer.toString(vote.getYesVote());
                             String disagreedVote = Integer.toString(vote.getNoVote());
                             holder.voteCountTV.setText(agreedVote+" people agreed with you and "+disagreedVote+" people disagreed with you!");
+
+                            String commentString = holder.commentET.getText().toString().trim();
+                            String currentUserID = firebaseAuth.getCurrentUser().getUid();
+                            Comment commentObj = new Comment(currentUserID, commentString);
+                            DatabaseReference commentRef = databaseReference.child("Votes").child(creatorId).child("comments").child(currentUserID);
+                            commentRef.setValue(commentObj);
+
                             notifyDataSetChanged();
-                            holder.radioGroup.setVisibility(View.INVISIBLE);
-                            holder.commentET.setVisibility(View.INVISIBLE);
-                            holder.submitBTN.setVisibility(View.INVISIBLE);
+                            holder.radioGroup.setVisibility(View.GONE);
+                            holder.commentET.setVisibility(View.GONE);
+                            holder.submitBTN.setVisibility(View.GONE);
+
 
 
                         }
@@ -107,17 +123,28 @@ public class CustomAdapertForHome extends RecyclerView.Adapter<CustomAdapertForH
                             String disagreedVote = Integer.toString(vote.getNoVote());
                             holder.voteCountTV.setText(agreedVote+" people agreed with you and "+disagreedVote+" people disagreed with you!");
 
+                            String commentString = holder.commentET.getText().toString().trim();
+                            String currentUserID = firebaseAuth.getCurrentUser().getUid();
+                            Comment commentObj = new Comment(currentUserID, commentString);
+                            DatabaseReference commentRef = databaseReference.child("Votes").child(creatorId).child("comments").child(currentUserID);
+                            commentRef.setValue(commentObj);
+
+                            notifyDataSetChanged();
+                            holder.radioGroup.setVisibility(View.GONE);
+                            holder.commentET.setVisibility(View.GONE);
+                            holder.submitBTN.setVisibility(View.GONE);
+
                         }
                     });
                 }
 
+               if (votes!=null && votes.size()>0){
+                   votes.clear();
+               }
+
 
             }
         });
-
-
-
-
 
 
     }

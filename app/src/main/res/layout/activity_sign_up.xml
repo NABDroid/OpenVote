@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#344955"
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".SignUpActivity">
@@ -14,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/edit_text_bg"
+        android:background="@drawable/curve_background"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Full Name"
         android:inputType="text"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="@color/text_color"
 
         />
 
@@ -32,15 +30,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edit_text_bg"
+        android:background="@drawable/curve_background"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Mobile Number"
         android:inputType="number"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="@color/text_color"
 
         />
 
@@ -50,15 +47,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edit_text_bg"
+        android:background="@drawable/curve_background"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="E-Mail"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="@color/text_color"
 
         />
 
@@ -67,15 +63,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edit_text_bg"
+        android:background="@drawable/curve_background"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="DD/MM/YYYY"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="@color/text_color"
 
         />
 
@@ -85,7 +80,7 @@
         android:layout_marginTop="4dp"
         android:padding="8dp"
         android:text="Gender"
-        android:textColor="#fff"
+        android:textColor="@color/text_color"
         android:textSize="20sp" />
 
     <RadioGroup
@@ -98,14 +93,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"
-            android:textColor="#fff" />
+            android:textColor="@color/text_color" />
 
         <RadioButton
             android:id="@+id/femaleId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Female"
-            android:textColor="#fff" />
+            android:textColor="@color/text_color" />
     </RadioGroup>
 
     <EditText
@@ -113,15 +108,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edit_text_bg"
+        android:background="@drawable/curve_background"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="@color/text_color"
 
         />
 
@@ -130,15 +124,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:background="@drawable/edit_text_bg"
+        android:background="@drawable/curve_background"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"
         android:maxLines="1"
         android:padding="8dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="@color/text_color"
 
         />
 
@@ -148,7 +141,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:background="@drawable/bg_signup_btn"
+        android:background="@drawable/button_background"
         android:clickable="true"
         android:padding="16dp"
         android:text="Sign UP"
@@ -158,13 +151,13 @@
 
 
     <TextView
-        android:id="@+id/alreadyMemberId"
+        android:id="@+id/goForSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="20dp"
-        android:text="Already have an account? Login Now"
-        android:textColor="#ED5E5E"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="Already have an account? Login Now!"
+        android:textColor="@color/text_color"
 
         />
 

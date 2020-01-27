@@ -18,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,9 +25,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView addVoteIV, menuIconIV;
     private RecyclerView activeVoteRecyclerView;
     private DatabaseReference databaseReference;
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
     private ArrayList<Vote> votes;
-    private CustomAdapertForHome customAdapertForHome;
+    private AdapertForHome adapertForHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         firebaseAuth = FirebaseAuth.getInstance();
         activeVoteRecyclerView = findViewById(R.id.activeVoteRecyclerViewID);
         votes = new ArrayList<>();
-        customAdapertForHome = new CustomAdapertForHome(votes);
+        adapertForHome = new AdapertForHome(votes, this);
     }
 
 
@@ -72,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     //initialize recyclerview
     private void initRecyclerView() {
         activeVoteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activeVoteRecyclerView.setAdapter(customAdapertForHome);
+        activeVoteRecyclerView.setAdapter(adapertForHome);
     }
 
 
@@ -89,7 +88,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     for (DataSnapshot data: dataSnapshot.getChildren()){
                         Vote vote = data.getValue(Vote.class);
                         votes.add(vote);
-                        customAdapertForHome.notifyDataSetChanged();
+                        adapertForHome.notifyDataSetChanged();
                     }
                 }
             }

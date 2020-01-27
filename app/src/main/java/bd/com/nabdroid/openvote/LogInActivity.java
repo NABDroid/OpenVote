@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +22,8 @@ import javax.security.auth.login.LoginException;
 
 public class LogInActivity extends AppCompatActivity {
     private EditText emailET, passwordET;
-    private Button loginBTN, goForSignUpBTN;
+    private Button loginBTN;
+    private TextView goForSignUpBTN;
     private String email, password;
     private FirebaseAuth firebaseAuth;
 

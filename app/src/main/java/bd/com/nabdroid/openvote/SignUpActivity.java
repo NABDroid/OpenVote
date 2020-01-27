@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 public class SignUpActivity extends AppCompatActivity {
     private EditText userNameET, mobileNumberET, emailET, dateOfBirthET, passwordET, confirmPasswordET;
     private RadioGroup genderRG;
+    private TextView goForSignUp;
     private Button registerBTN;
     private String userName, mobileNumber, email, dateOfBirth, gender, password, confirmPassword;
     private FirebaseAuth firebaseAuth;
@@ -49,6 +51,16 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+
+        goForSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+            }
+        });
+
+
+
 
 
     }
@@ -116,6 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
         genderRG = findViewById(R.id.genderRGSU);
         userNameET = findViewById(R.id.userNameETSU);
         mobileNumberET = findViewById(R.id.mobileNumberETSU);
+        goForSignUp = findViewById(R.id.goForSignUp);
         emailET = findViewById(R.id.emailETSU);
         dateOfBirthET = findViewById(R.id.dobETSU);
         passwordET = findViewById(R.id.passwordETSU);

@@ -25,7 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class PostVoteActivity extends AppCompatActivity {
 
@@ -36,7 +40,9 @@ public class PostVoteActivity extends AppCompatActivity {
     private CheckBox checkBoxForNotification;
 
 
-    private String voteCode, voteTopic, endTime, creatorName, creatorId, date, time;
+
+    private String voteCode, voteTopic,  creatorName, creatorId;
+    long endTime;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
@@ -82,7 +88,7 @@ public class PostVoteActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                creatorName = dataSnapshot.child("userName").getValue().toString();
-               
+
             }
 
             @Override
@@ -92,28 +98,6 @@ public class PostVoteActivity extends AppCompatActivity {
         });
 
 
-//        userInfoRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()){
-//
-//                    for(DataSnapshot data : dataSnapshot.getChildren()){
-//                        if(data.equals(creatorId)){
-//                            UserProfile userProfile = data.getValue(UserProfile.class);
-//                            creatorName = userProfile.getUserName();
-//                            startVoteBTN.setText(creatorName);
-//                        }
-//
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
 
     private void pickTime() {
@@ -122,6 +106,10 @@ public class PostVoteActivity extends AppCompatActivity {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
+
+
+
 
             }
         };
@@ -141,6 +129,23 @@ public class PostVoteActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
+                String currentDate = year+"/"+month+1+"/"+day;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, ''yy");
+
+                Date date=null;
+                try {
+                    date = simpleDateFormat.parse(currentDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                endTime = date.getTime();
+                pickDateTV.setText(simpleDateFormat.format(date));
+                try {
+                    pickTimeTV.setText(simpleDateFormat.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -149,22 +154,19 @@ public class PostVoteActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,onDateSetListener,year,month,day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, onDateSetListener,year,month,day);
         datePickerDialog.show();
-
     }
 
     private void getDataFromField() {
         voteCode = "#4561";
         voteTopic = voteTopicET.getText().toString().trim();
-
-
     }
-
 
     private void postVote() {
 
         Vote vote = new Vote(voteCode, voteTopic, creatorId, creatorName, 10, 0, 0);
+
         DatabaseReference userRef = databaseReference.child("Votes").child(creatorId);
         userRef.setValue(vote).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -39,20 +39,17 @@
                 android:src="@drawable/add_plus_icon" />
 
             <ImageView
+                android:id="@+id/groupIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/notification_bell_icon" />
+                android:src="@drawable/ic_group_black_24dp" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="1">
+
 
 
         <LinearLayout
@@ -61,21 +58,12 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Current Votes"
-                android:textAlignment="center"
-                android:textColor="@color/text_color"
-                android:textSize="16sp" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/activeVoteRecyclerViewID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

@@ -7,6 +7,7 @@
     android:background="#EFEDF2"
     android:orientation="vertical"
     tools:context=".CommentListActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,20 +22,19 @@
                 android:id="@+id/backPressIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/ic_keyboard_backspace_black_24dp" />
+                android:src="@drawable/ic_keyboard_backspace_black_24dp"/>
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginRight="15dp"
                 android:text="Comments"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
 
         </LinearLayout>
+
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

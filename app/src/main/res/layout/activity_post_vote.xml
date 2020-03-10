@@ -144,7 +144,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_margin="5dp"
             android:background="@drawable/button_background"
             android:text="Create and Start"
             android:textAlignment="center"

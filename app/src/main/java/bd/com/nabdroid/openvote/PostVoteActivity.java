@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,29 +26,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class PostVoteActivity extends AppCompatActivity {
 
-
     private EditText voteTopicET;
     private Button startVoteBTN;
     private TextView pickDateTV, pickTimeTV;
     private CheckBox checkBoxForNotification;
-
-
-
-    private String voteCode, voteTopic,  creatorName, creatorId;
-    long endTime;
-
+    private String voteTopic, creatorName, creatorId, endtimeString;
+    private long timeFromDatePicker, timeFromTimePicker;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+    private String timeString, dateString;
 
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,10 +67,10 @@ public class PostVoteActivity extends AppCompatActivity {
         startVoteBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 getDataFromField();
-
-                postVote();
-
+                getUniqueVoteId();
                 startActivity(new Intent(PostVoteActivity.this, HomeActivity.class));
 
 
@@ -82,12 +78,13 @@ public class PostVoteActivity extends AppCompatActivity {
         });
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
     private void getCreatorName() {
         final DatabaseReference userInfoRef = databaseReference.child("UserInfo").child(creatorId);
         userInfoRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               creatorName = dataSnapshot.child("userName").getValue().toString();
+                creatorName = dataSnapshot.child("userName").getValue().toString();
 
             }
 
@@ -100,15 +97,24 @@ public class PostVoteActivity extends AppCompatActivity {
 
     }
 
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
     private void pickTime() {
-
-
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                timeString = i + ":" + i1;
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+                try {
+                    date = simpleDateFormat.parse(timeString);
+                    timeFromTimePicker = date.getTime();
+                    pickTimeTV.setText(date.toString() + "///" + Long.toString(timeFromTimePicker));
 
 
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -118,34 +124,33 @@ public class PostVoteActivity extends AppCompatActivity {
         int hour = mTime.get(Calendar.HOUR_OF_DAY);
         int minute = mTime.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,onTimeSetListener,hour,minute,false);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, false);
         timePickerDialog.show();
+
 
     }
 
-    private void pickDate() {
 
+    //--------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void pickDate() {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-
-                String currentDate = year+"/"+month+1+"/"+day;
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, ''yy");
-
-                Date date=null;
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month + 1;
+                dateString = dayOfMonth + "/" + month + "/" + year;
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 try {
-                    date = simpleDateFormat.parse(currentDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    date = simpleDateFormat.parse(dateString);
+                    timeFromDatePicker = date.getTime();
+                    pickDateTV.setText(date.toString() + "///" + Long.toString(timeFromDatePicker));
 
-                endTime = date.getTime();
-                pickDateTV.setText(simpleDateFormat.format(date));
-                try {
-                    pickTimeTV.setText(simpleDateFormat.toString());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
             }
         };
 
@@ -154,31 +159,62 @@ public class PostVoteActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, onDateSetListener,year,month,day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
         datePickerDialog.show();
+
     }
 
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
     private void getDataFromField() {
-        voteCode = "#4561";
         voteTopic = voteTopicET.getText().toString().trim();
     }
 
-    private void postVote() {
 
-        Vote vote = new Vote(voteCode, voteTopic, creatorId, creatorName, 10, 0, 0);
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        DatabaseReference userRef = databaseReference.child("Votes").child(creatorId);
+    private void getUniqueVoteId() {
+        final int idForNewVote[] = new int[1];
+        final DatabaseReference totalVoteRef = databaseReference.child("TotalVotes");
+        totalVoteRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int lastVoteNumber = Integer.parseInt(dataSnapshot.getValue().toString());
+                idForNewVote[0] = lastVoteNumber + 1;
+                totalVoteRef.setValue(idForNewVote[0]);
+                Toast.makeText(PostVoteActivity.this, "OnDataChange: " + idForNewVote[0], Toast.LENGTH_SHORT).show();
+                postVote(idForNewVote[0]);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(PostVoteActivity.this, "Failed to count", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void postVote(int i) {
+        final long endTime = timeFromDatePicker + timeFromTimePicker;
+        final int idForNewVote = i;
+        endtimeString = "Ending on: "+dateString+" "+timeString+"";
+        Vote vote = new Vote(idForNewVote, voteTopic, creatorId, creatorName, endTime, 0, 0, endtimeString);
+
+        DatabaseReference userRef = databaseReference.child("Votes").child(String.valueOf(idForNewVote));
         userRef.setValue(vote).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(PostVoteActivity.this, "Posted successfully", Toast.LENGTH_SHORT).show();
+                DatabaseReference timeRef = databaseReference.child("Times").child(Integer.toString(idForNewVote));
+                VoteTimes voteTimes = new VoteTimes(endTime, idForNewVote);
+                timeRef.setValue(voteTimes);
             }
         });
 
     }
 
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
     private void init() {
+
         voteTopicET = findViewById(R.id.voteTopicPVETID);
         startVoteBTN = findViewById(R.id.startVotePVBTN);
         pickDateTV = findViewById(R.id.pickDatePVTVID);
@@ -188,4 +224,7 @@ public class PostVoteActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         creatorId = firebaseAuth.getCurrentUser().getUid();
     }
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
 }

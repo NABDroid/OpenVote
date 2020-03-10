@@ -50,6 +50,8 @@
         android:textColor="@color/white"
         android:textSize="16sp" />
 
+
+
     <TextView
         android:id="@+id/goForSignUpBTNLI"
         android:layout_width="match_parent"
@@ -60,5 +62,9 @@
         android:textAllCaps="false"
         android:textColor="@color/text_color"
         android:textSize="16sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
 
 </LinearLayout>

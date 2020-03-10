@@ -2,10 +2,13 @@ package bd.com.nabdroid.openvote;
 
 public class Vote {
 
-    private String voteCode, topic, creatorId, creatorName;
-    private int endTime, yesVote, noVote;
+    private String topic, creatorId, creatorName, endtimeString;
+    private int yesVote, noVote, voteCode;
+    long endTime;
 
-    public Vote(String voteCode, String topic, String creatorId, String creatorName, int endTime, int yesVote, int noVote) {
+
+
+    public Vote(int voteCode, String topic, String creatorId, String creatorName, long endTime, int yesVote, int noVote, String endtimeString) {
         this.voteCode = voteCode;
         this.topic = topic;
         this.creatorId = creatorId;
@@ -13,6 +16,7 @@ public class Vote {
         this.yesVote = yesVote;
         this.noVote = noVote;
         this.creatorName = creatorName;
+        this.endtimeString = endtimeString;
     }
 
     public String getCreatorName() {
@@ -24,14 +28,13 @@ public class Vote {
     }
 
     public Vote() {
-
     }
 
-    public String getVoteCode() {
+    public int getVoteCode() {
         return voteCode;
     }
 
-    public void setVoteCode(String voteCode) {
+    public void setVoteCode(int voteCode) {
         this.voteCode = voteCode;
     }
 
@@ -51,11 +54,11 @@ public class Vote {
         this.creatorId = creatorId;
     }
 
-    public int getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -74,4 +77,14 @@ public class Vote {
     public void setNoVote(int noVote) {
         this.noVote = noVote;
     }
+
+    public String getEndtimeString() {
+        return endtimeString;
+    }
+
+    public void setEndtimeString(String endtimeString) {
+        this.endtimeString = endtimeString;
+    }
+
+
 }

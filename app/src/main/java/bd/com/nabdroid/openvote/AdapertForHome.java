@@ -23,7 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHolder> {
 
@@ -42,7 +44,7 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
     @NonNull
     @Override
     public AdapertForHome.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_list_element_ui, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_vote_ui, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -51,8 +53,10 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
     public void onBindViewHolder(@NonNull final AdapertForHome.ViewHolder holder, int position) {
 
         //variables
-        final String Uniquecode, topic, currentVoteId, creatorName;
-        final int endTime, yesVote, noVote;
+        final String topic, creatorId, creatorName, endTime;
+        final int  yesVote, noVote;
+        final int uniqueCode;
+
 
         //collecting commentWritenName
         collectCommentWriterName();
@@ -61,11 +65,11 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
 
         //collecting form HomeActivity
         final Vote vote = votes.get(position);
-        Uniquecode = vote.getVoteCode();
+        uniqueCode = vote.getVoteCode();
         topic = vote.getTopic();
-        currentVoteId = vote.getCreatorId();
+        creatorId = vote.getCreatorId();
         creatorName = vote.getCreatorName();
-        endTime = vote.getEndTime();
+        endTime = vote.getEndtimeString();
         yesVote = vote.getYesVote();
         noVote = vote.getNoVote();
 
@@ -73,8 +77,8 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
         //showing data to List
         holder.userNameTV.setText(creatorName);
         holder.topicTV.setText(topic);
-        holder.titleTV.setText(Uniquecode);
-        holder.lifetimeTV.setText(Integer.toString(endTime));
+        holder.titleTV.setText(Integer.toString(uniqueCode));
+        holder.lifetimeTV.setText(endTime);
         String agreedVote = Integer.toString(vote.getYesVote());
         String disagreedVote = Integer.toString(vote.getNoVote());
         holder.voteCountTV.setText(agreedVote + " people agreed with you and " + disagreedVote + " people disagreed with you!");
@@ -94,7 +98,7 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
                     final int newVote = yesVote + 1;
 
                     //upgrade yes vote to database
-                    DatabaseReference currentNodeRef = databaseReference.child("Votes").child(currentVoteId).child("yesVote");
+                    DatabaseReference currentNodeRef = databaseReference.child("Votes").child(Integer.toString(uniqueCode)).child("yesVote");
                     currentNodeRef.setValue(newVote).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -108,11 +112,11 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
                             String creationTime = "Time Unknown";
 
 
-                            Comment commentObj = new Comment(commentWriterName, currentVoteId, commentFor, comment, creationTime);
+                            Comment commentObj = new Comment(commentWriterName, creatorId, commentFor, comment, creationTime);
 
 
                             //pushing comment into database
-                            DatabaseReference commentRef = databaseReference.child("Comment").child(currentVoteId).child(currentUserId);
+                            DatabaseReference commentRef = databaseReference.child("Comment").child(Integer.toString(uniqueCode)).child(currentUserId);
                             commentRef.setValue(commentObj);
 
                         }
@@ -124,7 +128,7 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
                     int newVote = noVote + 1;
 
                     //upgrade no vote to database
-                    DatabaseReference currentNodeRef = databaseReference.child("Votes").child(currentVoteId).child("noVote");
+                    DatabaseReference currentNodeRef = databaseReference.child("Votes").child(Integer.toString(uniqueCode)).child("noVote");
                     currentNodeRef.setValue(newVote).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -140,11 +144,11 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
                             String creationTime = "Time Unknown";
 
 
-                            Comment commentObj = new Comment(commentWriterName, currentVoteId, commentFor, comment, creationTime);
+                            Comment commentObj = new Comment(commentWriterName, creatorId, commentFor, comment, creationTime);
 
 
                             //pushing comment into database
-                            DatabaseReference commentRef = databaseReference.child("Comment").child(currentVoteId).child(currentUserId);
+                            DatabaseReference commentRef = databaseReference.child("Comment").child(Integer.toString(uniqueCode)).child(currentUserId);
                             commentRef.setValue(commentObj);
 
 
@@ -173,7 +177,7 @@ public class AdapertForHome extends RecyclerView.Adapter<AdapertForHome.ViewHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CommentListActivity.class);
-                intent.putExtra("postId", currentVoteId);
+                intent.putExtra("postId", Integer.toString(uniqueCode));
                 context.startActivity(intent);
 
 

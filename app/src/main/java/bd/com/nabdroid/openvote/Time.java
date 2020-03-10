@@ -1,8 +1,8 @@
 package bd.com.nabdroid.openvote;
 
 class VoteTimes {
-    Long endTime;
-    int voteId;
+    private Long endTime;
+    private int voteId;
 
     public VoteTimes() {
     }

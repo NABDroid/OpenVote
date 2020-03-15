@@ -1,13 +1,13 @@
 package bd.com.nabdroid.openvote;
 
-class VoteTimes {
+class VoteTime {
     private Long endTime;
     private int voteId;
 
-    public VoteTimes() {
+    public VoteTime() {
     }
 
-    public VoteTimes(Long endTime, int voteId) {
+    public VoteTime(Long endTime, int voteId) {
         this.endTime = endTime;
         this.voteId = voteId;
     }

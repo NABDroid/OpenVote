@@ -7,7 +7,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -204,8 +203,8 @@ public class PostVoteActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(PostVoteActivity.this, "Posted successfully", Toast.LENGTH_SHORT).show();
                 DatabaseReference timeRef = databaseReference.child("Times").child(Integer.toString(idForNewVote));
-                VoteTimes voteTimes = new VoteTimes(endTime, idForNewVote);
-                timeRef.setValue(voteTimes);
+                VoteTime voteTime = new VoteTime(endTime, idForNewVote);
+                timeRef.setValue(voteTime);
             }
         });
 

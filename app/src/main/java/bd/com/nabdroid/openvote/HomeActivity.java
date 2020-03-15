@@ -5,15 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,8 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,14 +41,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         init();  //initialize declared elements
-        deleteExpiredVotes();
+        findExpiredVote();
         initRecyclerView();  //initialize recyclerview
         getActiveVotes(); //get data from firebase
         addVoteIV.setOnClickListener(this); //takes to new vote creation page
         menuIconIV.setOnClickListener(this);
+        groupMenuIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, ResultActivity.class));
+            }
+        });
     }
 //-------------------------------------------------------------------------------------------------------------------
-    private void deleteExpiredVotes() {
+    private void findExpiredVote() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -88,10 +91,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        VoteTimes voteTimes = data.getValue(VoteTimes.class);
-                        if (voteTimes.getEndTime() <= totalCurrentTime){
+                        VoteTime voteTime = data.getValue(VoteTime.class);
+                        if (voteTime.getEndTime() <= totalCurrentTime){
                             data.getRef().removeValue();
-                            deleteVote(voteTimes.voteId);
+                            deleteVote(voteTime.getVoteId());
 
                         }
                     }
@@ -116,11 +119,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        Vote vote = data.getValue(Vote.class);
+                        final Vote vote = data.getValue(Vote.class);
                         if (vote.getVoteCode() == voteId){
-                            data.getRef().removeValue();
-                            deleteVote(vote.getVoteCode());
-
+                            data.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    publishResult(vote);
+                                }
+                            });
                         }
                     }
 
@@ -134,6 +140,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+
+    private void publishResult(Vote vote) {
+        DatabaseReference resultRef = databaseReference.child("Results").child(Integer.toString(vote.getVoteCode()));
+        resultRef.setValue(vote);
+
+
     }
 //-------------------------------------------------------------------------------------------------------------------
 
